@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Imagem padrao do produto</title>
+  <desc id="desc">Espaco reservado para produtos sem galeria cadastrada.</desc>
+  <rect width="900" height="900" fill="#f4f7fb"/>
+  <rect x="130" y="160" width="640" height="580" rx="28" fill="#ffffff" stroke="#d9e2ec" stroke-width="6"/>
+  <path d="M225 625 370 455l105 118 75-86 125 138H225Z" fill="#dbe7f3"/>
+  <circle cx="590" cy="330" r="58" fill="#c9d8e8"/>
+  <rect x="280" y="770" width="340" height="32" rx="16" fill="#d9e2ec"/>
+</svg>
