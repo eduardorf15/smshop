@@ -15,7 +15,7 @@ async function gerarToken() {
         grant_type: "authorization_code",
         client_id: "1974556024860650",
         client_secret: "2ta3mdvldnMIuf8XTR7vMRHxge3DkqsQ",
-        code: "TG-69ffeb14b84d0c000151c21b-3102858439",
+        code: "TG-69fff9c4bb6d72000101f2ba-3102858439",
         redirect_uri: "https://smshopp.netlify.app"
       })
     }
