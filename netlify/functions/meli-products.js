@@ -5,71 +5,47 @@ export async function handler(event) {
     if (!ids) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "IDs não enviados" })
-      };
-    }
-
-    const token = process.env.MELI_ACCESS_TOKEN;
-
-console.log("TOKEN:", token);
-
-    if (!token) {
-      return {
-        statusCode: 500,
         body: JSON.stringify({
-          error: "TOKEN NÃO ENCONTRADO"
+          error: "IDs não enviados"
         })
       };
     }
 
-    const response = await fetch(
-      `https://api.mercadolibre.com/items?ids=${ids}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
+    const listaIds = ids.split(",");
+
+    const items = await Promise.all(
+      listaIds.map(async (id) => {
+
+        const response = await fetch(
+          `https://api.mercadolibre.com/sites/MLB/search?q=${id}`
+        );
+
+        const data = await response.json();
+
+        const item =
+          data.results?.find((p) => p.id === id) ||
+          data.results?.[0];
+
+        if (!item) {
+          return {
+            id,
+            status: "error",
+            price: 0
+          };
         }
-      }
-    );
 
-    const data = await response.json();
-
-    console.log("DATA:", JSON.stringify(data, null, 2));
-
-    console.log("RESPOSTA ML:", data);
-
-    if (!Array.isArray(data)) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          error: "Resposta inválida da API",
-          details: data
-        })
-      };
-    }
-
-    const items = data.map((item) => {
-      if (item.code !== 200 || !item.body) {
         return {
-          id: item.id || "erro",
-          status: "error",
-          price: 0,
-          original_price: 0,
-          available_quantity: 0
+          id: item.id,
+          status: "active",
+          title: item.title,
+          price: item.price || 0,
+          original_price: item.original_price || 0,
+          available_quantity: item.available_quantity || 0,
+          permalink: item.permalink || "",
+          thumbnail: item.thumbnail || ""
         };
-      }
-
-      return {
-        id: item.body.id,
-        status: item.body.status,
-        price: item.body.price,
-        original_price: item.body.original_price || 0,
-        available_quantity: item.body.available_quantity || 0,
-        permalink: item.body.permalink,
-        thumbnail: item.body.thumbnail,
-        currency_id: item.body.currency_id,
-        title: item.body.title
-      };
-    });
+      })
+    );
 
     return {
       statusCode: 200,
@@ -80,11 +56,13 @@ console.log("TOKEN:", token);
     };
 
   } catch (error) {
+
     return {
       statusCode: 500,
       body: JSON.stringify({
         error: error.message
       })
     };
+
   }
 }
