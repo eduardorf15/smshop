@@ -11,6 +11,8 @@ export async function handler(event) {
 
     const token = process.env.MELI_ACCESS_TOKEN;
 
+console.log("TOKEN:", token);
+
     if (!token) {
       return {
         statusCode: 500,
@@ -30,6 +32,8 @@ export async function handler(event) {
     );
 
     const data = await response.json();
+
+    console.log("DATA:", JSON.stringify(data, null, 2));
 
     console.log("RESPOSTA ML:", data);
 
